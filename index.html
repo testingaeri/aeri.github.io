@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Guesser</title>
     <style>
-        /* Existing styles... */
+        /* Background styles */
         body.bg1 {
             background-color: lightblue;
         }
@@ -16,7 +16,7 @@
             background-color: lightcoral;
         }
 
-        /* New styles for the settings menu */ 
+        /* Settings menu styles */
         #settings-menu {
             position: absolute;
             top: 20px;
@@ -50,7 +50,7 @@
             <div id="output"></div>
         </div>
 
-        <button id="settings-button">⚙️ Settings</button>
+        <button id="settings-button">⚙️ Open Settings</button>
 
         <div id="settings-menu" class="hidden">
             <h2>Settings</h2>
@@ -85,17 +85,20 @@
             document.getElementById('output').innerHTML = '';
         }
 
-        // Background changer functionality
+        // Open settings menu
         document.getElementById('settings-button').addEventListener('click', () => {
-            document.getElementById('settings-menu').classList.toggle('hidden');
+            const settingsMenu = document.getElementById('settings-menu');
+            settingsMenu.classList.toggle('hidden');
         });
 
+        // Change background color
         document.getElementById('background-selector').addEventListener('change', (event) => {
             const selectedBackground = event.target.value;
             document.body.className = ''; // Clear existing classes
             document.body.classList.add(selectedBackground);
         });
 
+        // Close settings menu
         document.getElementById('close-settings').addEventListener('click', () => {
             document.getElementById('settings-menu').classList.add('hidden');
         });
