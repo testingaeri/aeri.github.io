@@ -6,49 +6,99 @@
     <title>Password Guesser</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 50px;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             transition: background-color 0.5s;
         }
-        #passwordInput {
-            font-size: 24px;
-            padding: 10px;
-            margin: 20px 0;
-            width: 300px;
+        .container {
+            text-align: center;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
         }
-        #output {
-            font-size: 20px;
-            margin-top: 20px;
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        #passwordInput {
+            font-size: 18px;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         button {
-            font-size: 20px;
+            font-size: 18px;
             padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
             cursor: pointer;
-            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        button:active {
+            background-color: #004494;
+            transform: translateY(0);
+        }
+        #output {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
         }
     </style>
 </head>
 <body>
-    <h1>Password Guesser</h1>
-    <label for="passwordInput">Enter your password guess:</label>
-    <input type="text" id="passwordInput" placeholder="Enter your guess here" />
-    <button onclick="checkPassword()">Guess Password</button>
-    <button onclick="resetInput()">Reset</button>
-    <div id="output"></div>
-    
+    <div class="container">
+        <h1>Password Guesser</h1>
+        <label for="passwordInput">Enter your password guess:</label>
+        <input type="text" id="passwordInput" placeholder="Enter your guess here" />
+        <div>
+            <button onclick="checkPassword()">Guess Password</button>
+            <button onclick="resetInput()">Reset</button>
+        </div>
+        <div id="output"></div>
+    </div>
+
     <script>
         const hardCodedPassword = "MySuperSecurePassword"; // Change this to your desired password
 
         function checkPassword() {
             const userGuess = document.getElementById('passwordInput').value.trim();
             const outputDiv = document.getElementById('output');
+            outputDiv.className = ''; // Reset class
             outputDiv.innerHTML = '';
 
             if (userGuess === hardCodedPassword) {
-                outputDiv.innerHTML = `<strong>Password guessed! You win!</strong>`;
+                outputDiv.innerHTML = `<strong class="success">Password guessed! You win!</strong>`;
             } else {
-                outputDiv.innerHTML = `<strong>Wrong guess! Try again.</strong>`;
+                outputDiv.innerHTML = `<strong class="error">Wrong guess! Try again.</strong>`;
             }
         }
 
