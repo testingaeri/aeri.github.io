@@ -3,27 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Guesser</title>
+    <title>Password Guesser and Spotify Control</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
             transition: background-color 0.5s;
         }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, #ff7e5f, #feb47b);
+            transition: background 0.5s;
+        }
         .container {
+            position: relative;
             text-align: center;
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 40px;
-            max-width: 400px;
+            max-width: 600px;
             width: 100%;
+            z-index: 1;
         }
         h1 {
             font-size: 28px;
@@ -35,7 +46,7 @@
             margin-bottom: 10px;
             display: block;
         }
-        #passwordInput {
+        #passwordInput, #spotifySearch {
             font-size: 18px;
             padding: 10px;
             margin-bottom: 20px;
@@ -72,22 +83,43 @@
         .error {
             color: #dc3545;
         }
+        .spotify-controls {
+            margin-top: 20px;
+        }
+        .spotify-controls input {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="background"></div>
     <div class="container">
-        <h1>Password Guesser</h1>
-        <label for="passwordInput">Enter your password guess:</label>
-        <input type="text" id="passwordInput" placeholder="Enter your guess here" />
-        <div>
-            <button onclick="checkPassword()">Guess Password</button>
-            <button onclick="resetInput()">Reset</button>
+        <h1>Password Guesser and Spotify Control</h1>
+        <div id="password-section">
+            <label for="passwordInput">Enter your password guess:</label>
+            <input type="text" id="passwordInput" placeholder="Enter your guess here" />
+            <div>
+                <button onclick="checkPassword()">Guess Password</button>
+                <button onclick="resetInput()">Reset</button>
+            </div>
+            <div id="output"></div>
         </div>
-        <div id="output"></div>
+        <div id="spotify-section" class="spotify-controls">
+            <h2>Spotify Control</h2>
+            <button onclick="loginToSpotify()">Login with Spotify</button>
+            <input type="text" id="spotifySearch" placeholder="Search for a song" />
+            <button onclick="searchAndPlay()">Search & Play</button>
+            <button onclick="pausePlayback()">Pause</button>
+            <button onclick="resumePlayback()">Resume</button>
+        </div>
     </div>
 
     <script>
-        const hardCodedPassword = "MySuperSecurePassword"; // Change this to your desired password
+        const hardCodedPassword = "aeri"; // Change this to your desired password
+        const clientId = '1abf5a63f8e7471d8e8331e760c8a8f2'; // Your Spotify Client ID
+        const redirectUri = 'https://testingaeri.github.io/aeri.github.io/'; // Your Redirect URI
+        const scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing';
+        let accessToken = '';
 
         function checkPassword() {
             const userGuess = document.getElementById('passwordInput').value.trim();
@@ -106,6 +138,79 @@
             document.getElementById('passwordInput').value = '';
             document.getElementById('output').innerHTML = '';
         }
+
+        function loginToSpotify() {
+            const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+            window.location = authUrl;
+        }
+
+        function getAccessTokenFromUrl() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            return params.get('access_token');
+        }
+
+        function searchAndPlay() {
+            if (!accessToken) {
+                alert('Please log in to Spotify first.');
+                return;
+            }
+            const query = document.getElementById('spotifySearch').value;
+            fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.tracks.items.length > 0) {
+                    const trackUri = data.tracks.items[0].uri;
+                    fetch('https://api.spotify.com/v1/me/player/play', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ uris: [trackUri] })
+                    });
+                } else {
+                    alert('No tracks found.');
+                }
+            });
+        }
+
+        function pausePlayback() {
+            if (!accessToken) {
+                alert('Please log in to Spotify first.');
+                return;
+            }
+            fetch('https://api.spotify.com/v1/me/player/pause', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+        }
+
+        function resumePlayback() {
+            if (!accessToken) {
+                alert('Please log in to Spotify first.');
+                return;
+            }
+            fetch('https://api.spotify.com/v1/me/player/play', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            accessToken = getAccessTokenFromUrl();
+            if (accessToken) {
+                document.querySelector('#spotify-section').style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
