@@ -6,7 +6,16 @@
     <title>Password Guesser</title>
     <style>
         /* Existing styles... */
-        
+        body.bg1 {
+            background-color: lightblue;
+        }
+        body.bg2 {
+            background-color: lightgreen;
+        }
+        body.bg3 {
+            background-color: lightcoral;
+        }
+
         /* New styles for the settings menu */ 
         #settings-menu {
             position: absolute;
@@ -21,6 +30,10 @@
 
         .hidden {
             display: none;
+        }
+
+        .container {
+            padding: 20px;
         }
     </style>
 </head>
@@ -37,7 +50,7 @@
             <div id="output"></div>
         </div>
 
-        <button id="settings-button">⚙️</button>
+        <button id="settings-button">⚙️ Settings</button>
 
         <div id="settings-menu" class="hidden">
             <h2>Settings</h2>
