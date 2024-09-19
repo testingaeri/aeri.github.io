@@ -16,24 +16,12 @@
             background-color: lightcoral;
         }
 
-        /* Settings menu styles */
-        #settings-menu {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: white;
-            padding: 20px;
-            border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         .container {
             padding: 20px;
+        }
+
+        .button-container {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -43,24 +31,21 @@
         <div id="password-section">
             <label for="passwordInput">Enter your password guess:</label>
             <input type="text" id="passwordInput" placeholder="Enter your guess here" />
-            <div>
+            <div class="button-container">
                 <button onclick="checkPassword()">Guess Password</button>
                 <button onclick="resetInput()">Reset</button>
             </div>
             <div id="output"></div>
         </div>
 
-        <button id="settings-button">⚙️ Open Settings</button>
-
-        <div id="settings-menu" class="hidden">
-            <h2>Settings</h2>
+        <div class="button-container">
             <label for="background-selector">Choose Background:</label>
             <select id="background-selector">
                 <option value="bg1">Background 1</option>
                 <option value="bg2">Background 2</option>
                 <option value="bg3">Background 3</option>
             </select>
-            <button id="close-settings">Close</button>
+            <button id="change-background">Change Background</button>
         </div>
     </div>
 
@@ -85,22 +70,11 @@
             document.getElementById('output').innerHTML = '';
         }
 
-        // Open settings menu
-        document.getElementById('settings-button').addEventListener('click', () => {
-            const settingsMenu = document.getElementById('settings-menu');
-            settingsMenu.classList.toggle('hidden');
-        });
-
         // Change background color
-        document.getElementById('background-selector').addEventListener('change', (event) => {
-            const selectedBackground = event.target.value;
+        document.getElementById('change-background').addEventListener('click', () => {
+            const selectedBackground = document.getElementById('background-selector').value;
             document.body.className = ''; // Clear existing classes
             document.body.classList.add(selectedBackground);
-        });
-
-        // Close settings menu
-        document.getElementById('close-settings').addEventListener('click', () => {
-            document.getElementById('settings-menu').classList.add('hidden');
         });
     </script>
 </body>
