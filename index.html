@@ -5,23 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Guesser</title>
     <style>
-        /* Background styles */
-        body.bg1 {
-            background-color: lightblue;
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s;
         }
-        body.bg2 {
-            background-color: lightgreen;
-        }
-        body.bg3 {
-            background-color: lightcoral;
-        }
-
         .container {
+            text-align: center;
             padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.8);
         }
-
-        .button-container {
-            margin-top: 20px;
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input {
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #fff;
         }
     </style>
 </head>
@@ -29,23 +58,25 @@
     <div class="container">
         <h1>Password Guesser</h1>
         <div id="password-section">
-            <label for="passwordInput">Enter your password guess:</label>
+            <label for="passwordInput">Enter your password guess:</label><br>
             <input type="text" id="passwordInput" placeholder="Enter your guess here" />
-            <div class="button-container">
+            <div>
                 <button onclick="checkPassword()">Guess Password</button>
                 <button onclick="resetInput()">Reset</button>
             </div>
-            <div id="output"></div>
+            <div id="output" class="output"></div>
         </div>
 
-        <div class="button-container">
-            <label for="background-selector">Choose Background:</label>
-            <select id="background-selector">
-                <option value="bg1">Background 1</option>
-                <option value="bg2">Background 2</option>
-                <option value="bg3">Background 3</option>
-            </select>
+        <div>
+            <label for="color-picker">Choose Background Color:</label><br>
+            <input type="color" id="color-picker" />
             <button id="change-background">Change Background</button>
+        </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"> Dark Mode
+            </label>
         </div>
     </div>
 
@@ -55,13 +86,12 @@
         function checkPassword() {
             const userGuess = document.getElementById('passwordInput').value.trim();
             const outputDiv = document.getElementById('output');
-            outputDiv.className = '';
             outputDiv.innerHTML = '';
 
             if (userGuess === hardCodedPassword) {
-                outputDiv.innerHTML = `<strong class="success">Password guessed! You win!</strong>`;
+                outputDiv.innerHTML = `<span style="color: green;">Password guessed! You win!</span>`;
             } else {
-                outputDiv.innerHTML = `<strong class="error">Wrong guess! Try again.</strong>`;
+                outputDiv.innerHTML = `<span style="color: red;">Wrong guess! Try again.</span>`;
             }
         }
 
@@ -72,10 +102,14 @@
 
         // Change background color
         document.getElementById('change-background').addEventListener('click', () => {
-            const selectedBackground = document.getElementById('background-selector').value;
-            document.body.className = ''; // Clear existing classes
-            document.body.classList.add(selectedBackground);
+            const selectedColor = document.getElementById('color-picker').value;
+            document.body.style.backgroundColor = selectedColor;
         });
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
     </script>
 </body>
 </html>
