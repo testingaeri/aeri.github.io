@@ -21,13 +21,6 @@
             font-size: 20px;
             margin-top: 20px;
         }
-        h1 {
-            font-size: 36px;
-            margin-bottom: 30px;
-        }
-        h2 {
-            margin-top: 50px;
-        }
         button {
             font-size: 20px;
             padding: 10px 20px;
@@ -44,10 +37,6 @@
     <button onclick="resetInput()">Reset</button>
     <div id="output"></div>
     
-    <h2>Settings</h2>
-    <label for="bgColor">Choose Background Color:</label>
-    <input type="color" id="bgColor" onchange="changeBackgroundColor(this.value)">
-
     <script>
         const hardCodedPassword = "MySuperSecurePassword"; // Change this to your desired password
 
@@ -61,10 +50,6 @@
             } else {
                 outputDiv.innerHTML = `<strong>Wrong guess! Try again.</strong>`;
             }
-        }
-
-        function changeBackgroundColor(color) {
-            document.body.style.backgroundColor = color;
         }
 
         function resetInput() {
