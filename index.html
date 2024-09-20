@@ -13,27 +13,32 @@
             margin: 0;
             font-family: 'Arial', sans-serif;
             transition: background-color 0.3s;
+            overflow: hidden;
         }
         .container {
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.9);
             position: relative;
+            width: 90%;
+            max-width: 500px;
         }
         h1 {
             margin-bottom: 20px;
             color: #333;
+            font-size: 24px;
         }
         input {
-            padding: 10px;
+            padding: 12px;
             border: 2px solid #333;
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            width: calc(100% - 30px);
         }
         button {
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             border-radius: 5px;
             background-color: #007BFF;
@@ -41,6 +46,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 5px;
+            font-size: 16px;
         }
         button:hover {
             background-color: #0056b3;
@@ -48,6 +54,7 @@
         .output {
             margin-top: 15px;
             font-weight: bold;
+            font-size: 18px;
         }
         .settings-menu {
             display: none;
@@ -57,7 +64,7 @@
             background: white;
             border: 1px solid #ccc;
             border-radius: 5px;
-            padding: 10px;
+            padding: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         .menu-toggle {
@@ -70,6 +77,10 @@
             border: none;
             padding: 5px 10px;
             border-radius: 5px;
+        }
+        #youtube-link {
+            width: calc(100% - 30px);
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -85,6 +96,10 @@
             </div>
             <div id="output" class="output"></div>
         </div>
+
+        <label for="youtube-link">Enter YouTube link:</label><br>
+        <input type="text" id="youtube-link" placeholder="YouTube link here" />
+        <button onclick="playMusic()">Play Music</button>
 
         <button class="menu-toggle" onclick="toggleSettings()">Settings</button>
         <div class="settings-menu" id="settings-menu">
@@ -113,24 +128,37 @@
             document.getElementById('output').innerHTML = '';
         }
 
-        // Change background color
+        function playMusic() {
+            const link = document.getElementById('youtube-link').value;
+            const videoId = link.split('v=')[1]?.split('&')[0]; // Extract video ID
+            if (videoId) {
+                const player = document.createElement('iframe');
+                player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                player.width = '100%';
+                player.height = '315';
+                player.frameBorder = '0';
+                player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                player.allowFullscreen = true;
+
+                const container = document.querySelector('.container');
+                container.appendChild(player);
+            } else {
+                alert('Please enter a valid YouTube link.');
+            }
+        }
+
         function changeBackground() {
             const selectedColor = document.getElementById('color-picker').value;
             document.body.style.backgroundColor = selectedColor;
         }
 
-        // Toggle settings menu
         function toggleSettings() {
             const settingsMenu = document.getElementById('settings-menu');
             settingsMenu.style.display = settingsMenu.style.display === 'none' || settingsMenu.style.display === '' ? 'block' : 'none';
         }
 
-        // Change background color automatically every 5 seconds
-        setInterval(() => {
-            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-            document.body.style.backgroundColor = randomColor;
-            document.getElementById('color-picker').value = randomColor; // Update the color picker
-        }, 5000);
+        // Update background color in real-time with color picker
+        document.getElementById('color-picker').addEventListener('input', changeBackground);
     </script>
 </body>
 </html>
