@@ -24,6 +24,7 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -37,7 +38,10 @@
         <!-- The iframe for the video will be inserted here -->
     </div>
 
+    <button onclick="loadTimelessVideo()">Timeless Video</button>
+
     <script>
+        // Load the video from the URL entered in the text input
         function loadVideo() {
             var url = document.getElementById("youtubeUrl").value;
             var videoId = extractVideoId(url);
@@ -66,10 +70,30 @@
             }
         }
 
+        // Extract video ID from a YouTube URL
         function extractVideoId(url) {
             var regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|\S+\/\S+\/|(?:[^\/\n\s]+?=|\S+\?v=)([a-zA-Z0-9_-]{11}))/;
             var match = url.match(regex);
             return match ? match[1] : null;
+        }
+
+        // Load the 'Timeless' video by its direct URL
+        function loadTimelessVideo() {
+            var timelessVideoUrl = "https://www.youtube.com/watch?v=5EpyN_6dqyk";
+            var videoId = extractVideoId(timelessVideoUrl); // Extract video ID from the timeless link
+            
+            if (videoId) {
+                var iframe = document.createElement("iframe");
+                iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1"; // Request autoplay
+                iframe.allow = "autoplay; encrypted-media"; // Allow autoplay permissions
+                iframe.title = "YouTube Timeless Video Player";
+                
+                var container = document.getElementById("videoContainer");
+                container.innerHTML = ""; // Clear any previous video
+                container.appendChild(iframe);
+            } else {
+                alert("Error: Could not extract video ID.");
+            }
         }
     </script>
 
